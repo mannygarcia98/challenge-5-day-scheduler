@@ -1,26 +1,20 @@
-//✅ 1. add time to #currentDay
-//✅ 2. add ability to see if the hour has passed yet.
-//✅ 3. add event listener to save button
-//4. add corresponding key and value for local storage on button click
-// 5. create function to retrieve values from local storage
-//6. refactor code
-
-var currentDay = $("#currentDay");
-var rightNow = moment().format("dddd MMMM Do");
+// *****Global Variables*****
+var dateElement = $("#currentDay");
+var currentDate = moment().format("dddd MMMM Do");
 var currentHour = moment().hour();
 
-(function writeDate() {
-  currentDay.html(rightNow);
-})();
+// adds date to header
+dateElement.html(currentDate);
 
-//add background color depending on time of day
+//add background color and get local storage
 $(".time-block").each(function () {
-  //gets current time from id name dropping the 'hour'
-  var timeBlockHour = $(this).attr("id").replace("hour", "");
-  //remove block color if any
+  //gets hour number from id name
+  var timeBlockHour = parseInt($(this).attr("id").replace("hour", ""));
+  //reset block color
   $(this).removeClass("past present future");
 
-  if (timeBlockHour == currentHour) {
+  //add block color
+  if (timeBlockHour === currentHour) {
     $(this).addClass("present");
   } else if (timeBlockHour < currentHour) {
     $(this).addClass("past");
@@ -28,7 +22,6 @@ $(".time-block").each(function () {
     $(this).addClass("future");
   }
   //get values from local storage if any
-  //need a loop that will change just the hour and repeat for each time block
   $("#hour" + timeBlockHour + " .description").val(localStorage.getItem("hour" + timeBlockHour));
 });
 
@@ -36,7 +29,6 @@ $(".time-block").each(function () {
 $(".saveBtn").on("click", function () {
   var hour = $(this).parent().attr("id");
   var description = $(this).siblings(".description").val();
-  console.log(hour);
-  console.log(description);
+
   localStorage.setItem(hour, description);
 });
